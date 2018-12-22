@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Counter extends Component {
+class Counter extends Component<{}, { counter: number }> {
   state = {
     counter: 0,
   };

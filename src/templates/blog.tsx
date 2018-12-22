@@ -4,8 +4,13 @@ import Img from 'gatsby-image';
 
 import Layout from '../components/Layout';
 import Link from '../components/Link';
+import { Site } from '../types';
 
-const Categories = ({ categories }) => (
+const Categories = ({
+  categories = [],
+}: {
+  categories: string[];
+}) => (
   <Fragment>
     <ul>
       {categories.map(category => (
@@ -16,6 +21,19 @@ const Categories = ({ categories }) => (
     </ul>
   </Fragment>
 );
+
+interface BlogProps {
+  data: {
+    site: Site;
+    allMdx: {
+      edges: {
+        node: {
+          id: string;
+        };
+      };
+    };
+  };
+}
 
 const Blog = ({
   data: { site, allMdx },

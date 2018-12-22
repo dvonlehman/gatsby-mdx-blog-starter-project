@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, SFC } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/tag';
@@ -8,16 +8,17 @@ import 'prismjs/themes/prism-okaidia.css';
 
 import Link from './Link';
 import mdxComponents from './mdx';
+import { Site, FrontMatter } from '../types';
+
+// ${() => {
+//   /* Override PrismJS Defaults */ return null;
+// }}
 
 injectGlobal`
   html, body {
     margin: 0;
     padding: 0;
   }
-
-  ${() => {
-    /* Override PrismJS Defaults */ return null;
-  }}
 
   pre {
     background-color: #2f1e2e !important;
@@ -41,23 +42,28 @@ const NAVIGATION = [
   { to: 'https://roadtoreact.com', label: 'Courses' },
 ];
 
-export default ({ site, frontmatter = {}, children }) => {
+interface LayoutProps {
+  site: Site;
+  frontmatter?: FrontMatter;
+}
+
+const Layout: SFC<LayoutProps> = props => {
   const {
     title,
     description: siteDescription,
     keywords: siteKeywords,
-  } = site.siteMetadata;
+  } = props.site.siteMetadata;
 
   const {
     keywords: frontmatterKeywords,
     description: frontmatterDescription,
-  } = frontmatter;
+  } = props.frontmatter;
 
   const keywords = (frontmatterKeywords || siteKeywords).join(', ');
   const description = frontmatterDescription || siteDescription;
 
   return (
-    <Fragment>
+    <>
       <Helmet
         title={title}
         meta={[
@@ -78,12 +84,14 @@ export default ({ site, frontmatter = {}, children }) => {
             ))}
           </ul>
 
-          {children}
+          {props.children}
         </Fragment>
       </MDXProvider>
-    </Fragment>
+    </>
   );
 };
+
+export default Layout;
 
 export const pageQuery = graphql`
   fragment site on Site {

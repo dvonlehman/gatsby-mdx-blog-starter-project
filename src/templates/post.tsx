@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, SFC } from 'react';
 import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
 import MDXRenderer from 'gatsby-mdx/mdx-renderer';
+import { Site, Mdx, PageContext } from '../types';
 
 import Layout from '../components/Layout';
 import Link from '../components/Link';
@@ -19,10 +20,18 @@ const CategoryList = ({ list = [] }) => (
   </Fragment>
 );
 
-export default function Post({
+interface PostProps {
+  data: {
+    site: Site;
+    mdx: Mdx;
+  };
+  pageContext: PageContext;
+}
+
+export const Post: SFC<PostProps> = ({
   data: { site, mdx },
   pageContext: { next, prev },
-}) {
+}) => {
   return (
     <Layout site={site} frontmatter={mdx.frontmatter}>
       <h1>{mdx.frontmatter.title}</h1>
@@ -57,7 +66,7 @@ export default function Post({
       </div>
     </Layout>
   );
-}
+};
 
 export const pageQuery = graphql`
   query($id: String!) {
